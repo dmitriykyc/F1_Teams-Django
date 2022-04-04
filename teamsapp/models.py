@@ -1,26 +1,11 @@
 from django.db import models
 
-
-class Commands(models.Model):
-    """ Команды Ф1 """
-    name = models.CharField('Название команды', max_length=150)
-    description = models.TextField('Описание', blank=True)
-    image = models.ImageField('Лого команды', upload_to='commands/')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Команда'
-        verbose_name_plural = 'Команды'
-
-
 class Directors(models.Model):
     """ Директора команд """
     first_name = models.CharField('Имя', max_length=100)
     last_name = models.CharField('Фамилия', max_length=100)
     photo = models.ImageField('Фото', upload_to='directors/')
-    command = models.ForeignKey(Commands, on_delete=models.SET_NULL, null=True)
+
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -28,6 +13,21 @@ class Directors(models.Model):
     class Meta:
         verbose_name = 'Директор'
         verbose_name_plural = 'Директора'
+
+
+class Commands(models.Model):
+    """ Команды Ф1 """
+    name = models.CharField('Название команды', max_length=150)
+    description = models.TextField('Описание', blank=True)
+    image = models.ImageField('Лого команды', upload_to='commands/')
+    directors = models.ForeignKey(Directors, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Команда'
+        verbose_name_plural = 'Команды'
 
 
 class Cars(models.Model):
@@ -49,6 +49,13 @@ class PhotoCars(models.Model):
     """ Фото болидов """
     car = models.ForeignKey(Cars, on_delete=models.SET_NULL, null=True )
     photo = models.ImageField('Фото', upload_to='cars/')
+
+    def __str__(self):
+        return f"{self.car}"
+
+    class Meta:
+        verbose_name = 'Фотография болида'
+        verbose_name_plural = 'Фотографии болидов'
 
 
 class Countries(models.Model):

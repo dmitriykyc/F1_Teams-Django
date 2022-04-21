@@ -42,6 +42,8 @@ class AddReview(View):
         command = Commands.objects.get(id=pk)
         if form.is_valid():
             form = form.save(commit=False)
+            if request.POST.get('parent', None):
+                form.parent_id = int(request.POST.get('parent'))
             form.command = command
             form.save()
         return redirect(command.get_absolute_url())

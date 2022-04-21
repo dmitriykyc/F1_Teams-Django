@@ -33,6 +33,9 @@ class Commands(models.Model):
     def get_absolute_url(self):
         return reverse('command', kwargs={'slug': self.url})
 
+    def get_review(self):
+        return self.command_review.filter(parent__isnull=True)
+
     class Meta:
         verbose_name = 'Команда'
         verbose_name_plural = 'Команды'
@@ -126,7 +129,7 @@ class Rewiews(models.Model):
     email = models.EmailField()
     name = models.CharField("Имя", max_length=50)
     text = models.TextField('Отзыв', max_length=5000)
-    parrent = models.ForeignKey(
+    parent = models.ForeignKey(
         'self', verbose_name='родитель', on_delete=models.SET_NULL, null=True, blank=True
     )
     command = models.ForeignKey(Commands, verbose_name='команда', on_delete=models.CASCADE, related_name="command_review")

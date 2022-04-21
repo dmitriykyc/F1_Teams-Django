@@ -11,8 +11,10 @@
 
         <div class="row">
             <h3>Отзыв: </h3>
-            <form action="{% url 'add_review' commands.id %}" method="post">
+            <form action="{% url 'add_review' commands.id %}" method="post" id="formReview">
                 {% csrf_token %}
+
+                <input type="hidden" name="parent" id="forParent" value="">
                 <div class="col-3">
                     <div class="mb-3">
                         <label for="contactEmail" class="form-label">Email:</label>
@@ -29,7 +31,7 @@
                     <div class="mb-3">
                         <div class="mb-3">
                             <label for="exampleFormControlTextarea1" class="form-label">Текст отзыва</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                            <textarea class="form-control" id="textComment" rows="3"
                                       name="text"></textarea>
                         </div>
                     </div>
@@ -39,15 +41,33 @@
                 </div>
             </form>
             <div class="row">
-                {% for review in commands.command_review.all %}
+                {% for review in commands.get_review.all %}
                     <div class="col-1">
                         <a href="#">
-                            <img class="media-object img-rounded" src="/media/pilots/792.jpg" alt="" width="50">
+                            <img class="media-object img-rounded" src="/media/pilots/792.jpg" alt="" width="50px">
                         </a>
                     </div>
                     <div class="class col-md-11">
                         <h3>{{ review.name }}</h3>
                         <h6>{{ review.text }}</h6>
+                        <a href="#formReview" onclick="addReview('{{ review.id }}', '{{ review.name }}')">Ответить</a>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"></div>
+                        <div class="col-10">
+                            {% for parrentreview in review.rewiews_set.all %}
+                                <a href="#">
+                                    <img class="media-object img-rounded" src="/media/pilots/792.jpg" alt=""
+                                         width="50px">
+                                </a>
+                                <h3>{{ parrentreview.name }}</h3>
+                                <h6>{{ parrentreview.text }}</h6>
+                                <hr>
+                            {% endfor %}
+
+                        </div>
+
+
                     </div>
                     <br>
                     <hr>
@@ -62,7 +82,14 @@
         </div>
     </div>
 
+    <script>
+        function addReview(id, name) {
+            console.log(id)
+            document.getElementById('forParent').value = id;
+            document.getElementById('textComment').innerText = name + ", ";
 
+        }
+    </script>
 
 {% endblock %}
 

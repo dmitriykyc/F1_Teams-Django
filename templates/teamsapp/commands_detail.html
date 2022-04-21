@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <img src="/media/{{ commands.photo_car_command.get.photo }}" alt="" height="100">
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <h3>Отзыв: </h3>
+            <form action="{% url 'add_review' commands.id %}" method="post">
+                {% csrf_token %}
+                <div class="col-3">
+                    <div class="mb-3">
+                        <label for="contactEmail" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="contactEmail" placeholder="name@example.com"
+                               name="email">
+                    </div>
+                    <div class="mb-3">
+                        <div class="mb-3">
+                            <label for="contactName" class="form-label">Имя:</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput1"
+                                   placeholder="name@example.com" name="name">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Текст отзыва</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                      name="text"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Отправить</button>
+                </div>
+            </form>
+            <div class="row">
+                {% for review in commands.command_review.all %}
+                    <div class="col-1">
+                        <a href="#">
+                            <img class="media-object img-rounded" src="/media/pilots/792.jpg" alt="" width="50">
+                        </a>
+                    </div>
+                    <div class="class col-md-11">
+                        <h3>{{ review.name }}</h3>
+                        <h6>{{ review.text }}</h6>
+                    </div>
+                    <br>
+                    <hr>
+                    <br>
+
+
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
